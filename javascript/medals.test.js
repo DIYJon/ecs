@@ -1,8 +1,46 @@
 function createMedalTable(medals) {
     // Parse the medal data to produce a medaltable
     // The winner gets 3 points, second place 2 points and third place 1 point
-    return
+        
+    
+    winners = [] // Array to group together all people who win as event has no impact on score
+    medals.forEach((event) => {
+        event.podium.forEach((positionFinished)=> {
+        winners.push(positionFinished)
+        })
+    });
+
+    // Splits the positions finished into countries and positions in order to create a group for list of countries
+    allWinners = [] 
+    winners.forEach((positionCountry) => {
+        a = positionCountry.split(".")
+        allWinners.push(a[1])
+    })
+    
+    // Removes copies on countries
+    table = allWinners.filter(function(item, placeInList, list) {
+        return list.indexOf(item) == placeInList;
+    })
+    
+    // Assigns a value to all the countries ready to add there points
+    score = []
+    table.forEach((country) => {score[country] = 0})
+    
+    // Adds the points
+    winners.forEach ((positionCountryScore) => {
+        b = positionCountryScore.split(".")
+        checkNumber = parseInt (b[0])
+        checkNumber = 4 - checkNumber
+        points = b[1]
+        score[points] += checkNumber
+            
+    })
+
+    return score;
 }
+
+
+
 
 describe("Medal Table Generator", () => {
     // Test function, please do not edit
